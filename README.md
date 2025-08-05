@@ -1,2 +1,2 @@
 # Data-structure
-College practical
+College practical for data structures 
