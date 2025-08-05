@@ -1,0 +1,23 @@
+public class customerid {
+    public static void main(String[] args) {
+        int[] arr = {101, 202, 303, 404, 505};
+        int key = 303;
+
+        int index = -1;
+        int i = 0;
+
+        for (int value : arr) {
+            if (value == key) {
+                index = i;
+                break;
+            }
+            i++;
+        }
+
+        if (index != -1) {
+            System.out.println("Customer " + key + " found at index: " + index + ".");
+        } else {
+            System.out.println("Customer " + key + " not found.");
+        }
+    }
+}
