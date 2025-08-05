@@ -1,0 +1,29 @@
+public class Cs {
+    public static void main(String[] args) {
+        int[] customerIds = {101, 203, 304, 405, 506, 607, 708};
+        int targetId = 405;
+        int size = customerIds.length;
+        int l = 0;
+        int h = size - 1;
+        boolean found = false;
+
+        while (l <= h) {
+            int mid = l + (h - l) / 2;
+
+            if (customerIds[mid] == targetId) {
+                found = true;
+                break;
+            } else if (customerIds[mid] < targetId) {
+                l = mid + 1;
+            } else {
+                h = mid - 1;
+            }
+        }
+
+        if (found) {
+            System.out.println("Customer account ID " + targetId + " exists.");
+        } else {
+            System.out.println("Customer account ID " + targetId + " does not exist.");
+        }
+    }
+}
