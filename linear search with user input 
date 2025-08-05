@@ -1,0 +1,38 @@
+import java.util.Scanner;
+
+public class idsearch {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.print("Enter the no. of customers: ");
+        int size = scanner.nextInt();
+
+        int[] arr = new int[size];
+
+        System.out.println("Enter " + size + "customer's id");
+        for (int i = 0; i < size; i++) {
+            arr[i] = scanner.nextInt();
+        }
+
+        System.out.print("Enter the id to search: ");
+        int key = scanner.nextInt();
+        
+        int index = -1;
+        int i = 0;
+
+        for (int value : arr) {
+            if (value == key) {
+                index = i;
+                break;
+            }
+            i++;
+        }
+
+        if (index != -1) {
+            System.out.println("Customer " + key + " found at index: " + index + ".");
+        } else {
+            System.out.println("Customer " + key + " not found.");
+        }
+
+    }
+}
