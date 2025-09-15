@@ -1,0 +1,94 @@
+import java.util.Scanner;
+import java.util.Stack;
+
+public class UndoRedoDemo {
+
+    static StringBuilder document = new StringBuilder();
+    static Stack<String> undoStack = new Stack<>();
+    static Stack<String> redoStack = new Stack<>();
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        while (true) {
+            System.out.println("\nCurrent Document: " + document.toString());
+            System.out.println("Choose an option:");
+            System.out.println("1. Make change (append text)");
+            System.out.println("2. Undo");
+            System.out.println("3. Redo");
+            System.out.println("4. Delete last n characters");
+            System.out.println("5. Exit");
+            System.out.print("Enter choice: ");
+            int choice = sc.nextInt();
+            sc.nextLine(); 
+
+            switch (choice) {
+                case 1:
+                    System.out.print("Enter text to append: ");
+                    String text = sc.nextLine();
+                    makeChange(text, true); // append
+                    break;
+
+                case 2:
+                    undo();
+                    break;
+
+                case 3:
+                    redo();
+                    break;
+
+                case 4:
+                    System.out.print("Enter number of characters to delete: ");
+                    int n = sc.nextInt();
+                    sc.nextLine(); // consume newline
+                    makeChange(String.valueOf(n), false); // delete n chars
+                    break;
+
+                case 5:
+                    System.out.println("Exiting...");
+                    sc.close();
+                    return;
+
+                default:
+                    System.out.println("Invalid choice.");
+            }
+        }
+    }
+
+    static void makeChange(String input, boolean isAppend) {
+        undoStack.push(document.toString());
+        redoStack.clear();
+
+        if (isAppend) {
+            document.append(input);
+        } else {
+            int n = Integer.parseInt(input);
+            if (n <= document.length() && n > 0) {
+                document.delete(document.length() - n, document.length());
+            } else {
+                System.out.println("Invalid number of characters to delete.");
+                undoStack.pop();
+            }
+        }
+    }
+
+    static void undo() {
+        if (!undoStack.isEmpty()) {
+            redoStack.push(document.toString());
+            String lastState = undoStack.pop();
+            document = new StringBuilder(lastState);
+        } else {
+            System.out.println("Nothing to undo!");
+        }
+    }
+
+    static void redo() {
+        if (!redoStack.isEmpty()) {
+            undoStack.push(document.toString());
+            String redoState = redoStack.pop();
+            document = new StringBuilder(redoState);
+        } else {
+            System.out.println("Nothing to redo!");
+        }
+    }
+}
