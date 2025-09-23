@@ -1,6 +1,6 @@
+import java.util.InputMismatchException;
 import java.util.Scanner;
 import java.util.Stack;
-import java.util.InputMismatchException;
 
 public class UndoRedoDemo {
 
@@ -47,6 +47,7 @@ public class UndoRedoDemo {
         }
     }
 
+   
     static void handleAppend(Scanner sc) {
         System.out.print("Enter text to append: ");
         String text = sc.nextLine();
@@ -57,6 +58,7 @@ public class UndoRedoDemo {
         makeChange(text, true);
     }
 
+  
     static void handleDelete(Scanner sc) {
         System.out.print("Enter number of characters to delete: ");
         int n = getValidatedIntInput(sc);
@@ -65,23 +67,25 @@ public class UndoRedoDemo {
         } else if (n > document.length()) {
             System.out.println("Cannot delete more characters than the document has.");
         } else {
-            makeChange(String.valueOf(n), false);
+            String deletedText = document.substring(document.length() - n);
+            makeChange(deletedText, false);
         }
     }
 
-    static void makeChange(String input, boolean isAppend) {
+   
+    static void makeChange(String text, boolean isAppend) {
+            undoStack.push(document.toString());
+     
+        redoStack.clear();
+
         if (isAppend) {
-            undoStack.push(document.toString());
-            redoStack.clear();
-            document.append(input);
+            document.append(text);
         } else {
-            int n = Integer.parseInt(input);
-            undoStack.push(document.toString());
-            redoStack.clear();
-            document.delete(document.length() - n, document.length());
+            document.delete(document.length() - text.length(), document.length());
         }
     }
 
+    
     static void undo() {
         if (!undoStack.isEmpty()) {
             redoStack.push(document.toString());
@@ -92,6 +96,7 @@ public class UndoRedoDemo {
         }
     }
 
+    
     static void redo() {
         if (!redoStack.isEmpty()) {
             undoStack.push(document.toString());
@@ -102,6 +107,7 @@ public class UndoRedoDemo {
         }
     }
 
+    
     static void printStatus() {
         System.out.println("\n-----------------------------");
         System.out.println("Current Document: \"" + document.toString() + "\"");
@@ -109,15 +115,16 @@ public class UndoRedoDemo {
         System.out.println("-----------------------------");
     }
 
+    
     static int getValidatedIntInput(Scanner sc) {
         while (true) {
             try {
                 int value = sc.nextInt();
-                sc.nextLine(); // clear newline
+                sc.nextLine(); 
                 return value;
             } catch (InputMismatchException e) {
                 System.out.print("Invalid input. Please enter a number: ");
-                sc.nextLine(); // clear invalid input
+                sc.nextLine(); 
             }
         }
     }
