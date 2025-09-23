@@ -47,18 +47,22 @@ public class UndoRedoDemo {
         }
     }
 
-   
     static void handleAppend(Scanner sc) {
         System.out.print("Enter text to append: ");
         String text = sc.nextLine();
+        
         if (text.trim().isEmpty()) {
             System.out.println("Cannot append empty text.");
             return;
         }
-        makeChange(text, true);
+
+        if (document.length() > 0) {
+            makeChange(" " + text, true);
+        } else {
+            makeChange(text, true);
+        }
     }
 
-  
     static void handleDelete(Scanner sc) {
         System.out.print("Enter number of characters to delete: ");
         int n = getValidatedIntInput(sc);
@@ -72,10 +76,8 @@ public class UndoRedoDemo {
         }
     }
 
-   
     static void makeChange(String text, boolean isAppend) {
-            undoStack.push(document.toString());
-     
+        undoStack.push(document.toString());
         redoStack.clear();
 
         if (isAppend) {
@@ -85,7 +87,6 @@ public class UndoRedoDemo {
         }
     }
 
-    
     static void undo() {
         if (!undoStack.isEmpty()) {
             redoStack.push(document.toString());
@@ -96,7 +97,6 @@ public class UndoRedoDemo {
         }
     }
 
-    
     static void redo() {
         if (!redoStack.isEmpty()) {
             undoStack.push(document.toString());
@@ -107,7 +107,6 @@ public class UndoRedoDemo {
         }
     }
 
-    
     static void printStatus() {
         System.out.println("\n-----------------------------");
         System.out.println("Current Document: \"" + document.toString() + "\"");
@@ -115,16 +114,15 @@ public class UndoRedoDemo {
         System.out.println("-----------------------------");
     }
 
-    
     static int getValidatedIntInput(Scanner sc) {
         while (true) {
             try {
                 int value = sc.nextInt();
-                sc.nextLine(); 
+                sc.nextLine();
                 return value;
             } catch (InputMismatchException e) {
                 System.out.print("Invalid input. Please enter a number: ");
-                sc.nextLine(); 
+                sc.nextLine();
             }
         }
     }
