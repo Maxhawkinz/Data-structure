@@ -1,0 +1,108 @@
+import java.util.Queue;
+import java.util.LinkedList;
+import java.util.Deque;
+import java.util.ArrayDeque;
+import java.util.Scanner;
+
+public class queueanddeque{
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.println("Choose data structure to work with:");
+        System.out.println("1 - Queue");
+        System.out.println("2 - Deque");
+        System.out.print("Enter your choice: ");
+
+        int choice = scanner.nextInt();
+        scanner.nextLine();  
+
+        if (choice == 1) {
+            runQueue(scanner);
+        } else if (choice == 2) {
+            runDeque(scanner);
+        } else {
+            System.out.println("Invalid choice. Exiting.");
+        }
+
+        scanner.close();
+    }
+
+    private static void runQueue(Scanner scanner) {
+        Queue<String> queue = new LinkedList<>();
+        System.out.println("Queue selected.");
+        System.out.println("Enter elements to add to the queue (type 'done' to stop):");
+
+        while (true) {
+            String input = scanner.nextLine();
+            if (input.equalsIgnoreCase("done")) break;
+            queue.add(input);
+            System.out.println("Added: " + input);
+        }
+
+        System.out.println("Current queue: " + queue);
+
+        
+        String removed = queue.poll();
+        if (removed != null) {
+            System.out.println("Removed from queue: " + removed);
+        } else {
+            System.out.println("Queue is empty, nothing to remove.");
+        }
+
+        System.out.println("Queue after removal: " + queue);
+
+
+        String head = queue.peek();
+        if (head != null) {
+            System.out.println("Next element to be removed (peek): " + head);
+        } else {
+            System.out.println("Queue is empty.");
+        }
+    }
+
+    private static void runDeque(Scanner scanner) {
+        Deque<String> deque = new ArrayDeque<>();
+        System.out.println("Deque selected.");
+        System.out.println("Add elements to the deque.");
+        System.out.println("Type 'front <element>' to add at front.");
+        System.out.println("Type 'end <element>' to add at end.");
+        System.out.println("Type 'done' to finish input.");
+
+        while (true) {
+            String input = scanner.nextLine();
+            if (input.equalsIgnoreCase("done")) break;
+
+            String[] parts = input.split(" ", 2);
+            if (parts.length < 2) {
+                System.out.println("Invalid input, please try again.");
+                continue;
+            }
+
+            String command = parts[0];
+            String element = parts[1];
+
+            if (command.equalsIgnoreCase("front")) {
+                deque.addFirst(element);
+                System.out.println("Added to front: " + element);
+            } else if (command.equalsIgnoreCase("end")) {
+                deque.addLast(element);
+                System.out.println("Added to end: " + element);
+            } else {
+                System.out.println("Unknown command. Use 'front' or 'end'.");
+            }
+        }
+
+        System.out.println("Deque contents: " + deque);
+
+ 
+        if (!deque.isEmpty()) {
+            System.out.println("Removing first: " + deque.removeFirst());
+        }
+        if (!deque.isEmpty()) {
+            System.out.println("Removing last: " + deque.removeLast());
+        }
+
+        System.out.println("Deque after removals: " + deque);
+    }
+}
