@@ -47,6 +47,47 @@ public class SimpleQueue {
         return queue[front];
     }
 
+    // New method to cancel event by name
+    public boolean cancelEvent(String eventName) {
+        if (size == 0) {
+            System.out.println("Queue is empty. Nothing to cancel.");
+            return false;
+        }
+        // Search for event
+        int index = -1;
+        for (int i = 0; i < size; i++) {
+            int idx = (front + i) % capacity;
+            if (queue[idx].equals(eventName)) {
+                index = idx;
+                break;
+            }        
+        }
+        if (index == -1) {
+            System.out.println("Event '" + eventName + "' not found in queue.");
+            return false;
+        }
+
+        // Remove event at index and shift elements backward
+        // We need to move all subsequent elements forward to fill the gap
+        int current = index;
+        while (current != rear) {
+            int next = (current + 1) % capacity;
+            if (next == rear) {
+                break;
+            }
+            queue[current] = queue[next];
+            current = next;
+        }
+        // Clear last moved element
+        queue[current] = null;
+        // Update rear and size
+        rear = (rear - 1 + capacity) % capacity;
+        size--;
+
+        System.out.println("Canceled event: " + eventName);
+        return true;
+    }
+
     public void displayQueue() {
         System.out.print("Current queue: [");
         for (int i = 0; i < size; i++) {
@@ -66,6 +107,7 @@ public class SimpleQueue {
             System.out.println("1 - Add Events");
             System.out.println("2 - Remove Event");
             System.out.println("3 - Exit");
+            System.out.println("4 - Cancel Event");
             System.out.print("Enter your choice: ");
 
             String choice = scanner.nextLine().trim();
@@ -105,6 +147,14 @@ public class SimpleQueue {
             } else if (choice.equals("3")) {
                 System.out.println("Exiting program.");
                 break;
+
+            } else if (choice.equals("4")) {
+                System.out.print("Enter event name to cancel: ");
+                String eventName = scanner.nextLine().trim();
+                if (q.cancelEvent(eventName)) {
+                    q.displayQueue();
+                }
+
             } else {
                 System.out.println("Invalid choice. Try again.");
             }
