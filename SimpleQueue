@@ -1,0 +1,117 @@
+import java.util.Scanner;
+
+public class SimpleQueue {
+    private String[] queue;
+    private int front;
+    private int rear;
+    private int size;
+    private int capacity;
+
+    public SimpleQueue(int capacity) {
+        this.capacity = capacity;
+        queue = new String[capacity];
+        front = 0;
+        rear = 0;
+        size = 0;
+    }
+
+    public boolean enqueue(String event) {
+        if (size == capacity) {
+            System.out.println("Queue is full. Cannot add: " + event);
+            return false;
+        }
+        queue[rear] = event;
+        rear = (rear + 1) % capacity;
+        size++;
+        System.out.println("Added: " + event);
+        return true;
+    }
+
+    public String dequeue() {
+        if (size == 0) {
+            System.out.println("Queue is empty. Nothing to remove.");
+            return null;
+        }
+        String removed = queue[front];
+        queue[front] = null;
+        front = (front + 1) % capacity;
+        size--;
+        System.out.println("Removed Event from queue: " + removed);
+        return removed;
+    }
+
+    public String peek() {
+        if (size == 0) {
+            return null;
+        }
+        return queue[front];
+    }
+
+    public void displayQueue() {
+        System.out.print("Current queue: [");
+        for (int i = 0; i < size; i++) {
+            int idx = (front + i) % capacity;
+            System.out.print(queue[idx]);
+            if (i != size - 1) System.out.print(", ");
+        }
+        System.out.println("]");
+    }
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        SimpleQueue q = new SimpleQueue(10);
+
+        while (true) {
+            System.out.println("Choose operation:");
+            System.out.println("1 - Add Events");
+            System.out.println("2 - Remove Event");
+            System.out.println("3 - Exit");
+            System.out.print("Enter your choice: ");
+
+            String choice = scanner.nextLine().trim();
+
+            if (choice.equals("1")) {
+                System.out.print("How many events do you want to add? ");
+                int n = 0;
+                try {
+                    n = Integer.parseInt(scanner.nextLine().trim());
+                } catch (NumberFormatException e) {
+                    System.out.println("Invalid number input. Returning to menu.");
+                    continue;
+                }
+                System.out.println("Enter " + n + " events:");
+
+                for (int i = 0; i < n; i++) {
+                    String event = scanner.nextLine().trim();
+                    if (!q.enqueue(event)) {
+                        // Queue full, stop adding early
+                        break;
+                    }
+                }
+                q.displayQueue();
+
+            } else if (choice.equals("2")) {
+                String removed = q.dequeue();
+                if (removed != null) {
+                    q.displayQueue();
+                    String next = q.peek();
+                    if (next != null) {
+                        System.out.println("Next Event to be removed (peek): " + next);
+                    } else {
+                        System.out.println("Queue is now empty.");
+                    }
+                }
+
+            } else if (choice.equals("3")) {
+                System.out.println("Exiting program.");
+                break;
+            } else {
+                System.out.println("Invalid choice. Try again.");
+            }
+
+            System.out.println(); // blank line for readability
+        }
+
+        scanner.close();
+    }
+}
